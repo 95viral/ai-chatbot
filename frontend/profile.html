@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - AI Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="nav-bar">
+    <h1>✨ AI Chatbot</h1>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='chat.html'">💬 Chat</span>
+      <span class="nav-link" onclick="location.href='history.html'">📋 History</span>
+      <span class="nav-link" onclick="location.href='documents.html'">📁 Documents</span>
+      <span class="nav-link" onclick="logout()">🚪 Logout</span>
+    </div>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">👤</div>
+      <h2>User Profile</h2>
+    </div>
+
+    <div class="profile-card">
+      <h3>Account Information</h3>
+      <div class="profile-item">
+        <label>Email</label>
+        <input type="email" id="userEmail" readonly>
+      </div>
+      <div class="profile-item">
+        <label>User ID</label>
+        <input type="text" id="userId" readonly>
+      </div>
+      <div class="profile-item">
+        <label>Joined</label>
+        <input type="text" id="joinDate" readonly>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <h3>Preferences</h3>
+      <div class="preference-item">
+        <label>Theme</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">
+            <span id="themeLabel">🌙 Dark Mode</span>
+          </button>
+        </div>
+      </div>
+      <div class="preference-item">
+        <label>Keyboard Shortcuts</label>
+        <div class="shortcuts-list">
+          <div class="shortcut">
+            <span class="shortcut-key">Cmd/Ctrl + K</span>
+            <span class="shortcut-desc">Search History</span>
+          </div>
+          <div class="shortcut">
+            <span class="shortcut-key">Cmd/Ctrl + E</span>
+            <span class="shortcut-desc">Export Chat</span>
+          </div>
+          <div class="shortcut">
+            <span class="shortcut-key">Cmd/Ctrl + T</span>
+            <span class="shortcut-desc">Toggle Theme</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <h3>Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" id="messageCount">0</span>
+          <span class="stat-label">Messages</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="documentCount">0</span>
+          <span class="stat-label">Documents</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="sessionCount">0</span>
+          <span class="stat-label">Sessions</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card danger">
+      <h3>Danger Zone</h3>
+      <p style="color: #9ca3af; margin-bottom: 15px;">These actions cannot be undone.</p>
+      <button class="btn-delete" onclick="resetAllData()">🔄 Reset All Data</button>
+      <button class="btn-delete" onclick="location.href='#'" style="margin-top: 10px;">🚪 Delete Account</button>
+    </div>
+
+    <div class="footer-links" style="margin-top: 40px;">
+      <span class="link" onclick="location.href='chat.html'">💬 Back to Chat</span>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  async function loadProfileData() {
+    const token = checkAuth();
+    try {
+      // Fetch user profile data from backend
+      const profileRes = await fetch(`${API_BASE}/user/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!profileRes.ok) {
+        throw new Error("Failed to load profile");
+      }
+
+      const profile = await profileRes.json();
+      
+      // Set email and user ID from actual profile data
+      document.getElementById("userEmail").value = profile.email;
+      document.getElementById("userId").value = `User-${profile.id}`;
+      
+      // Format and display the join date
+      const joinDate = new Date(profile.created_at);
+      document.getElementById("joinDate").value = joinDate.toLocaleDateString();
+
+      // Load statistics
+      const statsRes = await fetch(`${API_BASE}/user/stats`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (statsRes.ok) {
+        const stats = await statsRes.json();
+        document.getElementById("messageCount").textContent = stats.messages;
+        document.getElementById("documentCount").textContent = stats.documents;
+      }
+      
+      document.getElementById("sessionCount").textContent = localStorage.getItem("sessionCount") || "1";
+
+      // Update theme label
+      updateThemeLabel();
+    } catch (error) {
+      console.log("Profile load error:", error);
+      showError("Failed to load profile data");
+    }
+  }
+
+  function updateThemeLabel() {
+    const label = document.getElementById("themeLabel");
+    if (currentTheme === "dark") {
+      label.textContent = "🌙 Dark Mode";
+    } else {
+      label.textContent = "☀️ Light Mode";
+    }
+  }
+
+  function resetAllData() {
+    if (confirm("Are you sure? This will delete all your data permanently!")) {
+      localStorage.clear();
+      showSuccess("All data has been reset!");
+      setTimeout(() => location.href = "index.html", 1500);
+    }
+  }
+
+  loadProfileData();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat - AI Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="nav-bar">
+    <h1>✨ AI Chatbot</h1>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='history.html'">📋 History</span>
+      <span class="nav-link" onclick="location.href='documents.html'">📁 Documents</span>
+      <span class="nav-link" onclick="location.href='profile.html'">👤 Profile</span>
+      <span class="nav-link" onclick="logout()">🚪 Logout</span>
+    </div>
+  </div>
+
+  <div class="chat-box" id="chat"></div>
+
+  <div class="selected-document" id="selectedDocument"></div>
+
+  <div class="input-area">
+    <input id="message" type="text" placeholder="💬 Type your message here..." onkeypress="if(event.key==='Enter') sendMessage()">
+    <button class="btn-secondary" onclick="document.getElementById('docSelect').click()">📁 Document</button>
+    <input type="file" id="docSelect" style="display:none;" accept=".pdf,.txt,.docx" onchange="selectDocument(event)">
+    <button class="btn-primary" onclick="sendMessage()">📤 Send</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

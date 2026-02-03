@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Chat - AI Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="nav-bar">
+    <h1>AI Chatbot</h1>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='chat.html'">💬 Chat</span>
+      <span class="nav-link" onclick="location.href='documents.html'">📁 Documents</span>
+      <span class="nav-link" onclick="logout()">🚪 Logout</span>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h2>Ask About Document</h2>
+  </div>
+
+  <div class="chat-box" id="chat"></div>
+
+  <div class="input-area">
+    <input id="message" type="text" placeholder="Ask a question about the document..." onkeypress="if(event.key==='Enter') chatWithDocument(getCurrentDocId())">
+    <button class="btn-primary" onclick="chatWithDocument(getCurrentDocId())">Send</button>
+  </div>
+
+  <div class="footer-links">
+    <span class="link" onclick="location.href='documents.html'">Back to Documents</span>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  function getCurrentDocId() {
+    const params = new URLSearchParams(location.search);
+    return params.get('docId');
+  }
+</script>
+</body>
+</html>

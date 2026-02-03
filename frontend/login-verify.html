@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login OTP - AI Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="auth-card">
+    <h1>✨ AI Chatbot</h1>
+    <h2>Verify OTP</h2>
+    <p class="info-text">🔐 Enter the OTP sent to your email</p>
+
+    <div class="form-group">
+      <label>🔑 OTP Code</label>
+      <input id="otp" type="text" placeholder="Enter 6-digit OTP" maxlength="6" required>
+    </div>
+
+    <button class="btn-primary" onclick="loginStep2()">✅ Verify & Login</button>
+
+    <hr class="divider">
+    <p class="link-text"><span class="link" onclick="location.href='index.html'">🔓 Back to Login</span></p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
